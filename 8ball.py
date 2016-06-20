@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 import random
+import socket
+from flask import Flask, jsonify
+
+app = Flask(__name__)
 
 answers = [
         "It is certain",
@@ -25,8 +29,13 @@ answers = [
         "Very doubtful",
 ]
 
+hostname_ip4 = socket.gethostbyname(socket.gethostname())
+
+@app.route('/', methods=['GET'])
 def shake_8ball():
-        return answers[random.randint(0, len(answers))-1]
+    answer = answers[random.randint(0, len(answers))-1]
+    return jsonify({'answer': answer, 'hostname_ip4': hostname_ip4})
 
 if __name__ == "__main__":
-        print shake_8ball()
+    app.run(debug=True)
+
