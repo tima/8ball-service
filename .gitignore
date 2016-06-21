@@ -6,3 +6,7 @@ venv/
 *rpm
 scratch/
 .bundle/
+
+*ansible.cfg
+*inventory
+
