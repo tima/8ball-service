@@ -32,15 +32,19 @@ answers = [
 host_ip4 = socket.gethostbyname(socket.gethostname())
 
 @app.route('/', methods=['GET'])
-def shake_8ball():
+def shake_8ball(force_json=False):
     res = {
         'answer': answers[random.randint(0, len(answers))-1],
         'host_ip4': host_ip4,
     }
-    if request.accept_mimetypes['text/html'] > request.accept_mimetypes['application/json']:
+    if not force_json and request.accept_mimetypes['text/html'] > request.accept_mimetypes['application/json']:
         return render_template('8ball.j2', res=res)
-        # return '<html><body><h1>' + res['answer'] + '</h1></body></html>'
     return jsonify(res)
+
+@app.route('/json', methods=['GET'])
+def shake_8ball_force_json():
+    return shake_8ball(force_json=True)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
