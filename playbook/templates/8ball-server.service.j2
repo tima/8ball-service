@@ -1,0 +1,13 @@
+# /etc/systemd/system/8ball.service
+[Unit]
+Description=uWSGI instance to serve 8ball-server
+After=network.target
+
+[Service]
+User={{ eightball_owner }}
+Group={{ eightball_group }}
+WorkingDirectory={{ eightball_base_path }}
+ExecStart=/usr/bin/uwsgi --ini {{ eightball_base_path }}/8ball.ini
+
+[Install]
+WantedBy=multi-user.target

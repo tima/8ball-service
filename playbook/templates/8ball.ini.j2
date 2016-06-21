@@ -1,0 +1,16 @@
+[uwsgi]
+module = wsgi
+chdir = {{ eightball_base_path }}
+uid = {{ eightball_owner }} 
+gid = {{ eightball_group }}
+
+master = true
+processes = 5
+
+socket = {{ eightball_base_path }}/8ball.sock
+
+chmod-socket = 660
+vacuum = true
+
+die-on-term = true
+

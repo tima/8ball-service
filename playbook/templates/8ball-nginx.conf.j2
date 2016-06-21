@@ -1,0 +1,17 @@
+server {
+    listen 80;
+    server_name {{ ansible_host }};
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:{{ eightball_base_path }}/8ball.sock;
+    }
+
+    location /static {
+        alias {{eightball_base_path }}/static;
+    }
+
+    location /favicon.ico {
+        alias {{eightball_base_path}}/static/favicon.ico;
+    }
+}
