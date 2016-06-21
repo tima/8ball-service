@@ -6,7 +6,8 @@ venv/
 *rpm
 scratch/
 .bundle/
+*.BAK
 
 *ansible.cfg
 *inventory
-
+playbook/roles/tima.epel-repo/

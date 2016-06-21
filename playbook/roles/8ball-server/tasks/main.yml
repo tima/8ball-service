@@ -1,0 +1,6 @@
+---
+# tasks file for 8ball-server
+- include: install.yml
+- include: setup.yml
+- include: configure.yml
+- include: init.yml

@@ -1,0 +1,17 @@
+---
+- name: Create user the will run the 8ball-server
+  user:
+    name: "{{ eightball_owner }}" 
+    groups: "{{ eightball_group }}"
+    append: yes
+- name: Create service directory for 8ball-server
+  file:
+    state: directory
+    path: "{{ eightball_base_path }}"
+    owner: "{{ eightball_owner }}"
+    group: "{{ eightball_group }}" 
+- name: Install 8-ball server from git repo
+  git:
+    repo: "{{ eightball_git_repo }}"
+    dest: "{{ eightball_base_path }}"
+    version: "{{ eightball_git_version | default(omit) }}"

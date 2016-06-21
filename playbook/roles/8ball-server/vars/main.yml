@@ -1,0 +1,11 @@
+---
+# vars file for 8ball-server
+yum_common_packages:
+  - git
+  - python-pip
+  - python-devel
+  - gcc
+yum_nginx_package: nginx
+pip_packages:
+  - flask
+  - uwsgi

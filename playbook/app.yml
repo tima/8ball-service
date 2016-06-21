@@ -1,0 +1,8 @@
+---
+- hosts: "{{ hosts | default('8balls') }}"
+  name: "Installation and configuration 8ball-servers [CentOS7]"
+  vars:
+    # eightball_git_version: wsgi
+  roles:
+    - tima.epel-repo
+    - 8ball-server

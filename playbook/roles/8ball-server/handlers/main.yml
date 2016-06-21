@@ -1,0 +1,11 @@
+---
+# handlers file for 8ball-server
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+
+- name: restart 8ball-server
+  service:
+    name: "{{ eightball_service_name }}"
+    state: restarted

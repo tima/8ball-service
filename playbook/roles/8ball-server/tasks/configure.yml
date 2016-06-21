@@ -1,0 +1,19 @@
+---
+- name: Configure 8ball-server WSGI service
+  template:
+    src: 8ball.ini.j2
+    dest: "{{ eightball_uwsgi_ini }}"
+  notify: restart 8ball-server
+
+- name: Setup 8ball-server service
+  template:
+    src: 8ball.service.j2
+    dest: "{{ eightball_service_file }}"
+  notify: restart 8ball-server
+
+- name: Configure nginx to handle 8ball-server application
+  template:
+    src: 8ball.nginx.conf.j2
+    dest: "{{ eightball_nginx_conf }}" 
+  notify: restart nginx
+

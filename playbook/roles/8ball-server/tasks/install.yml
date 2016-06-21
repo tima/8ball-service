@@ -1,0 +1,20 @@
+---
+- name: Install check of common packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ yum_common_packages }}"
+
+- name: Install nginx 
+  yum:
+    name: "{{ yum_nginx_package }}"
+    state: present
+  notify: restart nginx
+
+- name: Install python packages from PIP
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ pip_packages }}"
+  notify: restart 8ball-server
+
