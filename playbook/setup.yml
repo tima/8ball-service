@@ -3,38 +3,45 @@
   name: "Installation and configuration 8ball-servers [CentOS7]"
   vars:
     # default
+    eightball_service_name: 8ball-server
     eightball_base_path: /srv/8ball-server
+    eightball_service: /etc/systemd/system/{{ eightball_service_name }}.service
+    eightball_nginx_conf: /etc/nginx/conf.d/8ball.conf
     eightball_uwsgi_ini: "{{ eightball_base_path }}/8ball.ini"
+    eightball_git_repo: git://github.com/tima/8ball-server.git
     eightball_owner: uwsgi
     eightball_group: nginx
     eightball_git_version: wsgi
     # vars
-    yum_packages:
+    yum_common_packages:
       - git
       - python-pip
       - python-devel
       - gcc
-      - nginx
+    yum_nginx_package: nginx
     pip_packages:
       - flask
       - uwsgi
     # TODO: need static images and favicon handling
     # TODO: reorg code into app subdirectory
-
+    # TODO: nginx service name?
   tasks:
+    # install
     - name: Installs latest EPEL repo
       yum:
         name: epel-release
         state: latest
-    # split into common tools and app requirements?
-    - name: Install check of required application packages
+    - name: Install check of common packages
       yum:
         name: "{{ item }}"
         state: present
-      with_items: "{{ yum_packages }}"
+      with_items: "{{ yum_common_packages }}"
+    - name: Install nginx 
+      yum:
+        name: "{{ yum_nginx_package }}"
+        state: present
       notify:
         - restart nginx
-        - restart 8ball-server
     - name: Install python packages from PIP
       pip:
         name: "{{ item }}"
@@ -42,6 +49,7 @@
       with_items: "{{ pip_packages }}"
       notify:
         - restart 8ball-server
+    # setup
     - name: Create user the will run the 8ball-server
       user:
         name: "{{ eightball_owner }}" 
@@ -55,9 +63,10 @@
         group: "{{ eightball_group }}" 
     - name: Install 8-ball server from git repo
       git:
-        repo: git://github.com/tima/8ball-server.git
+        repo: "{{ eightball_git_repo }}"
         dest: "{{ eightball_base_path }}"
         version: "{{ eightball_git_version | default(omit) }}" 
+    # configure
     - name: Configure 8ball-server WSGI service
       template:
         src: templates/8ball.ini.j2
@@ -67,15 +76,16 @@
     - name: Setup 8ball-server service
       template:
         src: templates/8ball-server.service.j2
-        dest: /etc/systemd/system/8ball-server.service 
+        dest: "{{ eightball_service }}"
       notify: 
         - restart 8ball-server
     - name: Configure nginx to handle 8ball-server application
       template:
         src: templates/8ball-nginx.conf.j2
-        dest: /etc/nginx/conf.d/8ball.conf
+        dest: "{{ eightball_nginx_conf }}" 
       notify: 
         - restart nginx
+    # init
     - name: Start and enable nginx and 8ball services
       service:
         name: "{{ item }}"
@@ -83,7 +93,7 @@
         enabled: yes
       with_items:
         - nginx
-        - 8ball-server 
+        - "{{ eightball_service_name }}"  
   handlers:
     - name: restart nginx
       service:
@@ -91,5 +101,5 @@
         state: restarted
     - name: restart 8ball-server
       service:
-        name: 8ball-server
+        name: "{{ eightball_service_name }}"
         state: restarted
