@@ -4,6 +4,7 @@
   vars:
     # default
     eightball_base_path: /srv/8ball-server
+    eightball_uwsgi_ini: "{{ eightball_base_path }}/8ball.ini"
     eightball_owner: uwsgi
     eightball_group: nginx
     eightball_git_version: wsgi
@@ -19,7 +20,7 @@
       - uwsgi
     # TODO: need static images and favicon handling
     # TODO: reorg code into app subdirectory
-    # TODO: ini file var
+
   tasks:
     - name: Installs latest EPEL repo
       yum:
@@ -60,7 +61,7 @@
     - name: Configure 8ball-server WSGI service
       template:
         src: templates/8ball.ini.j2
-        dest: "{{ eightball_base_path }}/8ball.ini"
+        dest: "{{ eightball_uwsgi_ini }}"
       notify: 
         - restart 8ball-server
     - name: Setup 8ball-server service
