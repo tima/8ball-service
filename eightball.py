@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-
 import random
 import socket
 from flask import Flask, request, jsonify, render_template
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 answers = [
         "It is certain",
@@ -31,7 +29,7 @@ answers = [
 
 hostname = socket.getfqdn()
 
-@app.route('/', methods=['GET'])
+@application.route('/', methods=['GET'])
 def shake_8ball(force_json=False):
     res = {
         'answer': answers[random.randint(0, len(answers))-1],
@@ -41,11 +39,11 @@ def shake_8ball(force_json=False):
         return render_template('8ball.j2', res=res)
     return jsonify(res)
 
-@app.route('/json', methods=['GET'])
+@application.route('/json', methods=['GET'])
 def shake_8ball_force_json():
     return shake_8ball(force_json=True)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0') 
+    app.run(host='0.0.0.0')
 
