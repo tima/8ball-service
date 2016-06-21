@@ -29,13 +29,13 @@ answers = [
         "Very doubtful",
 ]
 
-host_ip4 = socket.gethostbyname(socket.gethostname())
+hostname = socket.getfqdn()
 
 @app.route('/', methods=['GET'])
 def shake_8ball(force_json=False):
     res = {
         'answer': answers[random.randint(0, len(answers))-1],
-        'host_ip4': host_ip4,
+        'hostname': hostname
     }
     if not force_json and request.accept_mimetypes['text/html'] > request.accept_mimetypes['application/json']:
         return render_template('8ball.j2', res=res)
