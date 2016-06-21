@@ -11,7 +11,7 @@
     eightball_git_repo: git://github.com/tima/8ball-server.git
     eightball_owner: uwsgi
     eightball_group: nginx
-    eightball_git_version: wsgi
+    # eightball_git_version: wsgi
     # vars
     yum_common_packages:
       - git
