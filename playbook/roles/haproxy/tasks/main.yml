@@ -1,0 +1,22 @@
+---
+# tasks file for haproxy
+- include: "{{ ansible_os_family | lower }}.yml"
+
+- name: Configure  haproxy
+  template: 
+    src: haproxy.cfg.j2 
+    dest: /etc/haproxy/haproxy.cfg
+  notify: restart haproxy
+
+- name: Enable default haproxy
+  copy: 
+    src: etc_default_haproxy 
+    dest: /etc/default/haproxy
+  notify: restart haproxy
+
+- name: start haproxy service
+  service: 
+    name: haproxy 
+    state: started 
+    enabled: yes
+

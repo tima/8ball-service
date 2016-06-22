@@ -1,0 +1,4 @@
+---
+# defaults for haproxy
+web_group: web
+iface: 0

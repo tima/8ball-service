@@ -1,6 +1,7 @@
 ---
-- hosts: "{{ hosts | default('8balls') }}"
+- hosts: "{{ eightball_hosts | default('8balls') }}"
   name: "Installation and configuration 8ball-servers [CentOS7]"
+  become: yes
   vars:
     # eightball_git_version: wsgi
   roles:

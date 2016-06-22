@@ -1,0 +1,8 @@
+---
+- hosts: "{{ web_group }}"
+- hosts: "{{ haproxy_host | default('haproxy') }}"
+  name: "Installation and configuration of a HA Proxy service"
+  become: yes
+  roles:
+    - tima.epel-repo
+    - haproxy
