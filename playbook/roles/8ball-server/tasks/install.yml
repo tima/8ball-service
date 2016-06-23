@@ -18,3 +18,9 @@
   with_items: "{{ pip_packages }}"
   notify: restart 8ball-server
 
+- name: Install python statsd packages from PIP
+  pip:
+    name: statsd
+    state: present
+  when: eightball_metrics_enabled
+  notify: restart 8ball-server

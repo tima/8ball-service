@@ -8,3 +8,4 @@ eightball_uwsgi_ini: "{{ eightball_base_path }}/8ball.ini"
 eightball_git_repo: git://github.com/tima/8ball-server.git
 eightball_owner: uwsgi
 eightball_group: nginx
+eightball_metrics_enabled: False
