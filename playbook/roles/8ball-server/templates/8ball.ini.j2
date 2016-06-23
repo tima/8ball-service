@@ -1,5 +1,5 @@
 [uwsgi]
-module = wsgi
+module = wsgi:app
 chdir = {{ eightball_base_path }}
 uid = {{ eightball_owner }} 
 gid = {{ eightball_group }}

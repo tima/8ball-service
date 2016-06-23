@@ -1,11 +1,13 @@
 ---
 # defaults file for 8ball-server
 eightball_service_name: 8ball-server
-eightball_base_path: /srv/8ball-server
+eightball_base_path: /srv/8ball
+eightball_config_path: /etc/8ball
+eightball_logto_file: /var/log/8ball.log
 eightball_service_file: /etc/systemd/system/{{ eightball_service_name }}.service
 eightball_nginx_conf: /etc/nginx/conf.d/8ball.conf
-eightball_uwsgi_ini: "{{ eightball_base_path }}/8ball.ini"
-eightball_8ball_conf: "{{ eightball_base_path }}/8ball.conf"
+eightball_uwsgi_ini: "{{ eightball_config_path }}/8ball.ini"
+eightball_8ball_conf: "{{ eightball_config_path }}/8ball.conf"
 eightball_git_repo: git://github.com/tima/8ball-server.git
 eightball_owner: uwsgi
 eightball_group: nginx

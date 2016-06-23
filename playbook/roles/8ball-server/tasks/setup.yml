@@ -4,10 +4,19 @@
     name: "{{ eightball_owner }}" 
     groups: "{{ eightball_group }}"
     append: yes
-- name: Create service directory for 8ball-server
+- name: Create directories for 8ball-server
   file:
     state: directory
-    path: "{{ eightball_base_path }}"
+    path: "{{ item }}"
+    owner: "{{ eightball_owner }}"
+    group: "{{ eightball_group }}" 
+  with_items:
+    - "{{ eightball_base_path }}"
+    - "{{ eightball_config_path }}"
+- name: Create log for 8ball-server
+  file:
+    state: touch
+    path: "{{ eightball_logto_file }}"
     owner: "{{ eightball_owner }}"
     group: "{{ eightball_group }}" 
 - name: Install 8-ball server from git repo
