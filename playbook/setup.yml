@@ -1,0 +1,3 @@
+---
+- include: haproxy.yml
+- include: app.yml
