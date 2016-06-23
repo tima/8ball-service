@@ -1,6 +1,6 @@
 ---
 # defaults file for 8ball-server
-eightball_service_name: 8ball-server
+eightball_service_name: 8ball
 eightball_base_path: /srv/8ball
 eightball_app_path: "{{ eightball_base_path }}/app"
 eightball_config_path: /etc/8ball
