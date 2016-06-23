@@ -1,13 +1,19 @@
+import sys
 import random
 import socket
 import time
 from functools import wraps
 
 from flask import Flask, Response, g, request, jsonify, render_template
+from flask_ini import FlaskIni
 
-app = Flask(__name__)
+cfg_defaults = {
+    'stats_enabled': 'true',
+    'stats_ms_rounding': 'false',
+    'hostname': socket.gethostname()
+}
 
-answers = [
+eightball_answers = [
         "It is certain",
         "It is decidedly so",
         "Without a doubt",
@@ -30,18 +36,24 @@ answers = [
         "Very doubtful",
 ]
 
-hostname = socket.getfqdn()
+app = Flask(__name__)
+with app.app_context():
+    try:
+        app.cfg = FlaskIni(defaults=cfg_defaults)
+        app.cfg.read(['8ball.conf','/srv/8ball-server/8ball.conf'])
+        if not app.cfg.has_section('8ball'):
+            app.cfg.add_section('8ball')
+    except Exception, err:
+        sys.stderr.write('CONFIGURATION ERROR:', err)
+    stats_enabled = app.cfg.getboolean('8ball', 'stats_enabled') 
+    stats_ms_rounding =  app.cfg.getboolean('8ball', 'stats_ms_rounding') 
+    hostname =  app.cfg.get('8ball', 'hostname') 
 
-try:
-    from statsd import StatsClient
-    HAS_STATSD = True
-except ImportError:
-    HAS_STATSD = False
-
-# temporary config
-stats_enabled = True
-stats_ms_rounding =  False 
-# node_name = node-1
+if stats_enabled:
+    try:
+        from statsd import StatsClient
+    except ImportError:
+        sys.stderr.write('ERROR: %sn' % str(err))
 
 def stats_collected(f):
     @wraps(f)
@@ -66,7 +78,7 @@ def stats_collected(f):
 @stats_collected
 def shake_8ball(force_json=False):
     res = {
-        'answer': answers[random.randint(0, len(answers))-1],
+        'answer': eightball_answers[random.randint(0, len(eightball_answers))-1],
         'hostname': hostname
     }
     # time.sleep(random.uniform(0,0.2))
