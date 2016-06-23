@@ -1,7 +1,7 @@
 # uwsgi configuration for 8ball service
 [uwsgi]
 module = wsgi:app
-chdir = {{ eightball_base_path }}
+chdir = {{ eightball_app_path }}
 uid = {{ eightball_owner }} 
 gid = {{ eightball_group }}
 
