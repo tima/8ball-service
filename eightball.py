@@ -10,7 +10,7 @@ from flask_ini import FlaskIni
 cfg_defaults = {
     'stats_enabled': 'true',
     'stats_ms_rounding': 'false',
-    'hostname': socket.gethostname()
+    'nodename': socket.gethostname()
 }
 
 eightball_answers = [
@@ -47,7 +47,7 @@ with app.app_context():
         sys.stderr.write('CONFIGURATION ERROR:', err)
     stats_enabled = app.cfg.getboolean('8ball', 'stats_enabled') 
     stats_ms_rounding =  app.cfg.getboolean('8ball', 'stats_ms_rounding') 
-    hostname =  app.cfg.get('8ball', 'hostname') 
+    nodename =  app.cfg.get('8ball', 'nodename') 
 
 if stats_enabled:
     try:
@@ -79,11 +79,11 @@ def stats_collected(f):
 def shake_8ball(force_json=False):
     res = {
         'answer': eightball_answers[random.randint(0, len(eightball_answers))-1],
-        'hostname': hostname
+        'nodename': nodename
     }
     # time.sleep(random.uniform(0,0.2))
     if not force_json and request.accept_mimetypes['text/html'] > request.accept_mimetypes['application/json']:
-        return Response(response=render_template('8ball.j2', res=res), status=200, mimetype='text/html')
+        return Response(response=render_template('8ball.j2', eightball=res), status=200, mimetype='text/html')
     return jsonify(res)
 
 @app.route('/', methods=['GET'])
