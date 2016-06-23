@@ -52,7 +52,7 @@ with app.app_context():
 if stats_enabled:
     try:
         from statsd import StatsClient
-    except ImportError:
+    except ImportError, err:
         sys.stderr.write('ERROR: %sn' % str(err))
 
 def stats_collected(f):
