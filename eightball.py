@@ -40,20 +40,21 @@ app = Flask(__name__)
 with app.app_context():
     try:
         app.cfg = FlaskIni(defaults=cfg_defaults)
-        app.cfg.read(['8ball.conf','/srv/8ball-server/8ball.conf'])
+        app.cfg.read(['8ball.conf','/srv/8ball/8ball.conf'])
         if not app.cfg.has_section('8ball'):
             app.cfg.add_section('8ball')
     except Exception, err:
-        sys.stderr.write('CONFIGURATION ERROR:', err)
+        sys.stderr.write('CONFIGURATION ERROR: ', err)
     stats_enabled = app.cfg.getboolean('8ball', 'stats_enabled') 
     stats_ms_rounding =  app.cfg.getboolean('8ball', 'stats_ms_rounding') 
     nodename =  app.cfg.get('8ball', 'nodename') 
 
-if stats_enabled:
-    try:
-        from statsd import StatsClient
-    except ImportError, err:
-        sys.stderr.write('ERROR: %sn' % str(err))
+try:
+    from statsd import StatsClient
+except ImportError, err:
+    if stats_enabled:
+        sys.stderr.write('ERROR: %s' % str(err))
+        sys.exit(1)
 
 def stats_collected(f):
     @wraps(f)
