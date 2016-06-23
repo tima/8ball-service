@@ -11,4 +11,4 @@ scratch/
 
 *ansible.cfg
 *inventory
-playbook/roles/tima.epel-repo/
+playbooks/roles/tima.epel-repo/
