@@ -40,7 +40,7 @@ app = Flask(__name__)
 with app.app_context():
     try:
         app.cfg = FlaskIni(defaults=cfg_defaults)
-        app.cfg.read(['8ball.conf','/srv/8ball/8ball.conf'])
+        app.cfg.read('/etc/8ball/8ball.conf')
         if not app.cfg.has_section('8ball'):
             app.cfg.add_section('8ball')
     except Exception, err:
