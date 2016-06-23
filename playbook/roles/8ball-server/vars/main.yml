@@ -8,4 +8,5 @@ yum_common_packages:
 yum_nginx_package: nginx
 pip_packages:
   - flask
+  - Flask-ini
   - uwsgi
