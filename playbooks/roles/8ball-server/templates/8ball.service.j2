@@ -7,7 +7,7 @@ After=network.target
 User={{ eightball_owner }}
 Group={{ eightball_group }}
 WorkingDirectory={{ eightball_base_path }}
-ExecStart=/usr/bin/uwsgi --ini {{ eightball_uwsgi_ini }} --logto {{ eightball_logto_file }} 
+ExecStart=/usr/bin/uwsgi --ini {{ eightball_wsgi_conf }} --logto {{ eightball_logto_file }} 
 
 [Install]
 WantedBy=multi-user.target
