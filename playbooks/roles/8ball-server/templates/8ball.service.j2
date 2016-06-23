@@ -6,7 +6,7 @@ After=network.target
 [Service]
 User={{ eightball_owner }}
 Group={{ eightball_group }}
-WorkingDirectory={{ eightball_base_path }}
+WorkingDirectory={{ eightball_app_path }}
 ExecStart=/usr/bin/uwsgi --ini {{ eightball_wsgi_conf }} --logto {{ eightball_logto_file }} 
 
 [Install]
