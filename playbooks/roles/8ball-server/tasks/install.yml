@@ -22,5 +22,5 @@
   pip:
     name: statsd
     state: present
-  when: eightball_metrics_enabled
+  when: eightball_metrics_enabled | bool
   notify: restart 8ball-server

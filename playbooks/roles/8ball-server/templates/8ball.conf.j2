@@ -1,7 +1,7 @@
 [flask]
 
 [8ball]
-stats_enabled = {{ eightball_metrics_enabled | lower}}
-stats_ms_rounding = {{ eightball_metrics_ms_rounding | lower }}
+stats_enabled = {{ eightball_metrics_enabled | bool | lower}}
+stats_ms_rounding = {{ eightball_metrics_ms_rounding | bool | lower }}
 nodename = {{ inventory_hostname }}
 
