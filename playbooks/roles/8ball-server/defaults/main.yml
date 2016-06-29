@@ -13,5 +13,5 @@ eightball_git_repo: git://github.com/tima/8ball-server.git
 eightball_owner: uwsgi
 eightball_group: nginx
 eightball_metrics_enabled: False
-eightball_metrics_ms_rounding: False
+#eightball_metrics_ms_rounding: False
 

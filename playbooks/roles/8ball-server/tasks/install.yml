@@ -18,9 +18,9 @@
   with_items: "{{ pip_packages }}"
   notify: restart 8ball-server
 
-- name: Install python statsd packages from PIP
+- name: Install python influxdb package from PIP
   pip:
-    name: statsd
+    name: influxdb
     state: present
   when: eightball_metrics_enabled | bool
   notify: restart 8ball-server

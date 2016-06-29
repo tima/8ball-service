@@ -1,9 +1,9 @@
 ---
-- name: Configure 8ball service
-  template:
-    src: 8ball.conf.j2
-    dest: "{{ eightball_8ball_conf }}"
-  notify: restart 8ball-server
+#- name: Configure 8ball service
+#  template:
+#    src: 8ball.conf.j2
+#    dest: "{{ eightball_8ball_conf }}"
+#  notify: restart 8ball-server
 
 - name: Configure 8ball-server WSGI service
   template:

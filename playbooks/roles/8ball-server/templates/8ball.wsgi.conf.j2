@@ -15,3 +15,6 @@ vacuum = true
 
 die-on-term = true
 
+env = EIGHTBALL_STATS_ENABLED={{ eightball_metrics_enabled | bool | lower}}
+env = EIGHTBALL_NODENAME={{ inventory_hostname }}
+env = EIGHTBALL_INFLUXDB_HOST={{ hostvars['control']['ansible_host'] }}
