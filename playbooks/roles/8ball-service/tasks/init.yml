@@ -1,9 +1,12 @@
 ---
-- name: Start and enable nginx and 8ball services
+# need to keep these seperate so seperate callback events fire
+- name: Start and enable nginx services
   service:
-    name: "{{ item }}"
+    name: nginx 
     state: started
     enabled: yes
-  with_items:
-    - nginx
-    - "{{ eightball_service_name }}" 
+- name: Start and enable 8ball services
+  service:
+    name: "{{ eightball_service_name }}"
+    state: started
+    enabled: yes
