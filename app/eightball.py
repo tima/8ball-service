@@ -50,7 +50,7 @@ with app.app_context():
     nodename =  app.cfg.get('8ball', 'nodename') 
 
 try:
-    from statsd import StatsClient
+    #from statsd import StatsClient
 except ImportError, err:
     if stats_enabled:
         sys.stderr.write('ERROR: %s' % str(err))
@@ -64,13 +64,13 @@ def stats_collected(f):
             rv = f(*args, **kwargs)
             end = time.time()
             delta = (end-start) * 1000 
-            if stats_ms_rounding:
-                delta = int(delta)
-            if not hasattr(g, 'statsd'):
-                g.statsd = StatsClient(prefix='8ball') 
             (x, mimetype) = rv.mimetype.split('/')
-            g.statsd.incr(mimetype)
-            g.statsd.timing(mimetype, delta)
+            #if stats_ms_rounding:
+                #delta = int(delta)
+            #if not hasattr(g, 'statsd'):
+                #g.statsd = StatsClient(prefix='8ball') 
+            #g.statsd.incr(mimetype)
+            #g.statsd.timing(mimetype, delta)
         else:
            rv = f(*args, **kwargs)
         return rv
