@@ -18,7 +18,7 @@
       delegate_to: "{{ groups[haproxy_host][0] }}"
 
   roles:
-    - 8ball-server 
+    - 8ball-service
 
   post_tasks:
     - name: enable the server in haproxy

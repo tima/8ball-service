@@ -1,10 +1,10 @@
 ---
-- name: Create user the will run the 8ball-server
+- name: Create user the will run the 8ball-service
   user:
     name: "{{ eightball_owner }}" 
     groups: "{{ eightball_group }}"
     append: yes
-- name: Create directories for 8ball-server
+- name: Create directories for 8ball-service
   file:
     state: directory
     path: "{{ item }}"
@@ -13,13 +13,13 @@
   with_items:
     - "{{ eightball_base_path }}"
     - "{{ eightball_config_path }}"
-- name: Create log for 8ball-server
+- name: Create log for 8ball-service
   file:
     state: touch
     path: "{{ eightball_logto_file }}"
     owner: "{{ eightball_owner }}"
     group: "{{ eightball_group }}" 
-- name: Install 8-ball server from git repo
+- name: Install 8-ball service from git repo
   git:
     repo: "{{ eightball_git_repo }}"
     dest: "{{ eightball_base_path }}"

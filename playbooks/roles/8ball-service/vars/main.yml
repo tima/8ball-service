@@ -1,5 +1,5 @@
 ---
-# vars file for 8ball-server
+# vars file for 8ball-service
 yum_common_packages:
   - git
   - python-pip

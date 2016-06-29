@@ -1,5 +1,5 @@
 ---
-# defaults file for 8ball-server
+# defaults file for 8ball-service
 eightball_service_name: 8ball
 eightball_base_path: /srv/8ball
 eightball_app_path: "{{ eightball_base_path }}/app"
@@ -9,7 +9,7 @@ eightball_service_file: /etc/systemd/system/{{ eightball_service_name }}.service
 eightball_nginx_conf: /etc/nginx/conf.d/8ball.conf
 eightball_wsgi_conf: "{{ eightball_config_path }}/wsgi.conf"
 eightball_8ball_conf: "{{ eightball_config_path }}/8ball.conf"
-eightball_git_repo: git://github.com/tima/8ball-server.git
+eightball_git_repo: git://github.com/tima/8ball-service.git
 eightball_owner: uwsgi
 eightball_group: nginx
 eightball_metrics_enabled: False

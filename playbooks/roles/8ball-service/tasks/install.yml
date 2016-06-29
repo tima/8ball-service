@@ -16,11 +16,11 @@
     name: "{{ item }}"
     state: present
   with_items: "{{ pip_packages }}"
-  notify: restart 8ball-server
+  notify: restart 8ball-service
 
 - name: Install python influxdb package from PIP
   pip:
     name: influxdb
     state: present
   when: eightball_metrics_enabled | bool
-  notify: restart 8ball-server
+  notify: restart 8ball-service

@@ -3,21 +3,21 @@
 #  template:
 #    src: 8ball.conf.j2
 #    dest: "{{ eightball_8ball_conf }}"
-#  notify: restart 8ball-server
+#  notify: restart 8ball-service
 
-- name: Configure 8ball-server WSGI service
+- name: Configure WSGI 8ball-service
   template:
     src: 8ball.wsgi.conf.j2
     dest: "{{ eightball_wsgi_conf }}"
-  notify: restart 8ball-server
+  notify: restart 8ball-service
 
-- name: Setup 8ball-server service
+- name: Setup 8ball-service
   template:
     src: 8ball.service.j2
     dest: "{{ eightball_service_file }}"
-  notify: restart 8ball-server
+  notify: restart 8ball-service
 
-- name: Configure nginx to handle 8ball-server application
+- name: Configure nginx to handle 8ball-service
   template:
     src: 8ball.nginx.conf.j2
     dest: "{{ eightball_nginx_conf }}" 
