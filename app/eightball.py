@@ -1,3 +1,4 @@
+import os
 import sys
 import random
 import socket
@@ -5,13 +6,6 @@ import time
 from functools import wraps
 
 from flask import Flask, Response, g, request, jsonify, render_template
-from flask_ini import FlaskIni
-
-cfg_defaults = {
-    'stats_enabled': 'true',
-    'stats_ms_rounding': 'false',
-    'nodename': socket.gethostname()
-}
 
 eightball_answers = [
         "It is certain",
@@ -36,25 +30,25 @@ eightball_answers = [
         "Very doubtful",
 ]
 
+def str2bool(v):
+    return v.lower() in ['true', '1', 'yes']
+
+# init app with config
 app = Flask(__name__)
-with app.app_context():
-    try:
-        app.cfg = FlaskIni(defaults=cfg_defaults)
-        app.cfg.read('/etc/8ball/8ball.conf')
-        if not app.cfg.has_section('8ball'):
-            app.cfg.add_section('8ball')
-    except Exception, err:
-        sys.stderr.write('CONFIGURATION ERROR: ', err)
-    stats_enabled = app.cfg.getboolean('8ball', 'stats_enabled') 
-    stats_ms_rounding =  app.cfg.getboolean('8ball', 'stats_ms_rounding') 
-    nodename =  app.cfg.get('8ball', 'nodename') 
+stats_enabled = str2bool(os.getenv('EIGHTBALL_STATS_ENABLED', 'no'))
+nodename = os.getenv('EIGHTBALL_NODENAME', socket.gethostname())
+influxdb_host = os.getenv('EIGHTBALL_INFLUXDB_HOST', 'localhost')
 
 try:
-    #from statsd import StatsClient
+    from influxdb import InfluxDBClient
+    HAS_INFLUXDB = True
 except ImportError, err:
-    if stats_enabled:
-        sys.stderr.write('ERROR: %s' % str(err))
-        sys.exit(1)
+    HAS_INFLUXDB = False
+
+if stats_enabled and not HAS_INFLUXDB:
+    sys.stderr.write('ERROR: %s' % str(err))
+    sys.exit(1)
+
 
 def stats_collected(f):
     @wraps(f)
@@ -65,12 +59,25 @@ def stats_collected(f):
             end = time.time()
             delta = (end-start) * 1000 
             (x, mimetype) = rv.mimetype.split('/')
-            #if stats_ms_rounding:
-                #delta = int(delta)
-            #if not hasattr(g, 'statsd'):
-                #g.statsd = StatsClient(prefix='8ball') 
-            #g.statsd.incr(mimetype)
-            #g.statsd.timing(mimetype, delta)
+            if not hasattr(g, 'influxdb'):
+                g.influxdb = InfluxDBClient(host=influxdb_host, database='8ball')
+            try:
+                g.influxdb.create_database('8ball')
+            except:
+                pass
+            stats_body = [
+                {
+                    'measurement': '8ball',
+                    'tags': { 'mimetype': mimetype },
+                    'fields': { 'response': 1 } 
+                },
+                {
+                    'measurement': '8ball',
+                    'tags': { 'mimetype': mimetype },
+                    'fields': { 'response_time': delta }
+                }
+            ]
+            g.influxdb.write_points(stats_body)
         else:
            rv = f(*args, **kwargs)
         return rv
