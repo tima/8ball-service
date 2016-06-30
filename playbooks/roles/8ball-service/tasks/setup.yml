@@ -24,3 +24,5 @@
     repo: "{{ eightball_git_repo }}"
     dest: "{{ eightball_base_path }}"
     version: "{{ eightball_git_version | default(omit) }}"
+  notify:
+    - restart 8ball-service
